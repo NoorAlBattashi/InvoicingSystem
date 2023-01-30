@@ -6,6 +6,7 @@ package com.invo;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.InputMismatchException;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.zip.Inflater;
@@ -26,6 +27,8 @@ public class App {
 	 * @param args
 	 */
 	public static void main(String[] args) {
+		GroceryShop myShop = new GroceryShop("Grocery Shop");
+
 		// Sub Menu for Shop Settings
 		Menu subMenuShopSettings = new Menu();
 		subMenuShopSettings.addMenuItem(new MenuItem(1, "Load Data"));
@@ -65,67 +68,139 @@ public class App {
 
 		// let the user select from the menu
 		System.out.print("Enter your choice: ");
-		Scanner menuScanner = new Scanner(System.in);
-		Integer choice = Integer.parseInt(menuScanner.nextLine());
+		int choice = intScanner();
+		try {
+			switch (choice) {
+			case 1: {
+				// Shop Settings
+				MenuItem currMenuItem = mainMenu.getMenuItem(1);
+				currMenuItem.menu.printMenuItems();
+				System.out.println();
 
-		switch (choice) {
-		case 1: {
-			// Shop Settings
-			MenuItem currMenuItem = mainMenu.getMenuItem(1);
-			currMenuItem.menu.printMenuItems();
-			System.out.println();
+				// let the user select from the sub menu
+				System.out.print("Enter your choice: ");
+				int choiceShopSettingsSubMenu = intScanner();
 
-			// let the user select from the sub menu
-			System.out.print("Enter your choice: ");
-			Scanner ShopSettingsSubMenuScanner = new Scanner(System.in);
-			Integer choiceShopSettingsSubMenu = Integer.parseInt(ShopSettingsSubMenuScanner.nextLine());
+				try {
+					switch (choiceShopSettingsSubMenu) {
+					case 1: {
 
-			if (choiceShopSettingsSubMenu == 1) {
+					}
+					}
+				} catch (IllegalArgumentException ex) {
+					System.out.println("Error: " + ex.getMessage());
+				}
 
 			}
-		}
-		case 2: {
-			// Manage Shop Items
-			MenuItem currMenuItem = mainMenu.getMenuItem(2);
-			currMenuItem.menu.printMenuItems();
-			System.out.println();
-		}
+			case 2: {
+				// Manage Shop Items
+				MenuItem currMenuItem = mainMenu.getMenuItem(2);
+				currMenuItem.menu.printMenuItems();
+				System.out.println();
 
-		case 3: {
-			// Create New Invoice
-			System.out.println();
-		}
-		case 4: {
-			// Report: Statistics
-			System.out.println();
-		}
-		case 5: {
-			// Report: All Invoices
-			System.out.println();
-		}
-		case 6: {
-			// Search (1) Invoice
-			System.out.println();
-		}
-		case 7: {
-			// Program Statistics
-			System.out.println();
-		}
-		case 8: {
-			// Exit
-			System.out.println();
-		}
-		default:
-			throw new IllegalArgumentException("Unexpected value: " + choice);
+				// let the user select from the sub menu
+				System.out.print("Enter your choice: ");
+				int choiceManageShopItemsSubMenu = intScanner();
+				try {
+					switch (choiceManageShopItemsSubMenu) {
+					case 1: {
+						// Add Items
+						System.out.println("Please write the details of the item:");
+						// ask the user to enter the itemID
+						System.out.print("Write the item id: ");
+						int theItemID = intScanner();
+
+						// ask the user to enter the item name
+						System.out.print("Write the item name: ");
+						String name = stringScanner();
+
+						// ask the user to enter the unit Price
+						System.out.print("Write the unit price: ");
+						double unitPrice = doubleScanner();
+
+						// ask the user to enter the quantity
+						System.out.print("Write the quantity: ");
+						int quantity = intScanner();
+
+						// Store the data
+						Item addNewItem = new Item(theItemID, name, unitPrice, quantity);
+						myShop.addItem(addNewItem);
+						myShop.storeItem(myShop.itemsArrayList);
+
+					}
+					}
+				} catch (IllegalArgumentException ex) {
+					System.out.println("Error: " + ex.getMessage());
+				}
+
+			}
+
+			case 3: {
+				// Create New Invoice
+				System.out.println();
+			}
+			case 4: {
+				// Report: Statistics
+				System.out.println();
+			}
+			case 5: {
+				// Report: All Invoices
+				System.out.println();
+			}
+			case 6: {
+				// Search (1) Invoice
+				System.out.println();
+			}
+			case 7: {
+				// Program Statistics
+				System.out.println();
+			}
+			case 8: {
+				// Exit
+				System.out.println();
+			}
+			}
+		} catch (IllegalArgumentException ex) {
+			System.out.println("Error: " + ex.getMessage());
+
 		}
 
 	}
 
-	public static int itemId() {
-		// ask the user to enter the itemID
-		System.out.print("Write the item id: ");
-		Scanner itemIdScanner = new Scanner(System.in);
-		int itemID = itemIdScanner.nextInt();
-		return itemID;
+	public static int intScanner() {
+		try {
+			Scanner inputScanner = new Scanner(System.in);
+			int outputValue = inputScanner.nextInt();
+			return outputValue;
+		} catch (InputMismatchException e) {
+			System.out.println("Invalid input. It must be an integer.");
+			System.out.print("Enter again here: ");
+			return intScanner();
+		}
 	}
+
+	public static String stringScanner() {
+		try {
+			Scanner inputScanner = new Scanner(System.in);
+			String outputValue = inputScanner.nextLine();
+			return outputValue;
+		} catch (InputMismatchException e) {
+			System.out.println("Invalid input. It must be a string.");
+			System.out.print("Enter again here: ");
+			return stringScanner();
+		}
+	}
+
+	public static double doubleScanner() {
+		try {
+			Scanner inputScanner = new Scanner(System.in);
+			double outputValue = inputScanner.nextDouble();
+			return outputValue;
+		} catch (InputMismatchException e) {
+			System.out.println("Invalid input. It must be a double.");
+			System.out.print("Enter again here: ");
+			return doubleScanner();
+		}
+	}
+
 }
