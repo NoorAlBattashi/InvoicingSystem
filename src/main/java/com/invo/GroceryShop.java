@@ -5,6 +5,7 @@ package com.invo;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
@@ -15,12 +16,13 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.Type;
-
 /**
  * @author LAP-9 
  */
@@ -48,13 +50,35 @@ public class GroceryShop {
 		try(FileWriter writer = new FileWriter(filePath, true)){
 			writer.write(json);
 			writer.write("\n");
-			writer.flush();
 			System.out.println("Serialization Done");
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	} 
+	public void showItem() {
+		//Deserialize the json string and recreate arraylist
+		Gson gson = new Gson();
+		try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
+			String line;
+			while ((line = reader.readLine()) != null) {
+				Type type = new TypeToken<List<Item>>() {}.getType();
+				ArrayList<Item> deserializedItems = gson.fromJson(line, type);
+				
+				for (Item currItem : deserializedItems) {
+					System.out.println(currItem.getItemID());
+					System.out.println(currItem.getName());
+					System.out.println(currItem.getUnitPrice());
+					System.out.println(currItem.getQuantity());
+				}
+			}
+			System.out.println("Deserialization Done");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+	}
+	
 
 	
 	

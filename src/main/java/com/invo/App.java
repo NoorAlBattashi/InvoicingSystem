@@ -128,6 +128,13 @@ public class App {
 						myShop.storeItem(myShop.itemsArrayList);
 
 					}
+					case 2: {}
+					case 3: {}
+					case 4: {
+						//Show Items
+						myShop.showItem();
+					}
+					case 5: {}
 					}
 				} catch (IllegalArgumentException ex) {
 					System.out.println("Error: " + ex.getMessage());
