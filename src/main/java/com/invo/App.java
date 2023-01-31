@@ -96,6 +96,15 @@ public class App {
 				try {
 					switch (choiceShopSettingsSubMenu) {
 					case 1: {// Load Data
+						System.out.print("The Items: ");
+						System.out.println();
+						myShop.showItem();
+						System.out.println();
+						System.out.println("==============================");
+						System.out.print("The Invoices: ");
+						System.out.println();
+						generateReport.allInvoice();
+						System.out.println();
 						break;
 					}
 					case 2: {// Set Shop Name
@@ -276,7 +285,9 @@ public class App {
 			}
 			case 6: {
 				// Search (1) Invoice
-				generateReport.detailedInvoice();
+				System.out.print("Write the invoice id: ");
+				int id = intScanner();
+				generateReport.detailedInvoice(id);
 				System.out.println();
 				option6++;
 				break;

@@ -120,27 +120,80 @@ public class Report {
 		}
 	}
 
-	public void detailedInvoice() {
+	public void detailedInvoice(int index) {
 		Gson gson = new Gson();
-		Integer counter = 1;
+		// Integer counter = 1;
 		Item item = null;
 		Invoice invoice = new Invoice();
+		List<Object> collectList = new ArrayList<Object>();
 		try (BufferedReader reader = new BufferedReader(new FileReader(detailedInvoiceFilePath))) {
 			String line;
 			while ((line = reader.readLine()) != null) {
 				Type type = new TypeToken<List<Object>>() {
 				}.getType();
 				List<Object> deserializedItems = gson.fromJson(line, type);
+				collectList.add(deserializedItems);
+//				System.out.println(deserializedItems);
+//				for (Object iObject : deserializedItems) {
+//					// System.out.println("(" + counter + ")");
 
-				// for (Object iObject : deserializedItems) {
-				// System.out.println("(" + counter + ")");
-				System.out.println(deserializedItems.get(0).getClass());
-				//
 				// counter++;
-				// }
+//				}
+//				for (int i = 0; i < deserializedItems.size(); i++) {
+//					   Object element = deserializedItems.get(i);
+//					   if (element instanceof ArrayList) {
+//					      ArrayList arrayList = (ArrayList) element;
+//					      for (Object item1 : arrayList) {
+//					    	  System.out.println(item1);
+//					    	 
+//					      }
+//					   }
+//					}
+
+//				ArrayList<Invoice> invoices = null;
+//				ArrayList<Item> itemArrayList = null;
+//				for (Object object : deserializedItems) {
+//				  if (object instanceof ArrayList) {
+//				    ArrayList<Object> list = (ArrayList<Object>) object;
+//				    for (Object item1 : list) {
+//				      if (item1 instanceof Invoice && invoices == null) {
+//				        invoices = new ArrayList<Invoice>();
+//				        invoices.add((Invoice) item1);
+//				      } else if (item1 instanceof Item && itemArrayList == null) {
+//				        itemArrayList = new ArrayList<Item>();
+//				        itemArrayList.add((Item) item1);
+//				      }
+//				    }
+//				  }
+//				}
+//
+//				if (invoices != null) {
+//				  for (Invoice invoice1 : invoices) {
+//					  System.out.println(invoices.get(0));
+//				  }
+//				}
+//
+//				if (itemArrayList != null) {
+//				  for (Item item1 : itemArrayList) {
+//					  System.out.println(itemArrayList.get(0));
+//				  }
+//				}
+//
+//				System.out.println(invoices);
+//				
+
 			}
+			System.out.println();
+			System.out.println("The invoice with the item");
+			System.out.println(collectList.get(index - 1).toString());
+			System.out.println();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+
+	private char[] item1(int i) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }
