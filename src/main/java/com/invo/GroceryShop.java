@@ -31,7 +31,7 @@ import java.lang.reflect.Type;
 public class GroceryShop {
 	public static String itemFilePath = "data/Items.json";
 	public static String shopFilePath = "data/ShopDetails.json";
-	public static String updatedItemsFilePath = "data/UpdatedItems.json";
+	public static String updatedAfterDeleteFilePath = "data/UpdateItemsAfterDeletion.json";
 	public static String updatedPriceFilePath = "data/UpdatePrice.json";
 	ArrayList<Item> itemsArrayList = new ArrayList<Item>();
 	ArrayList<Item> update = new ArrayList<Item>();
@@ -65,10 +65,12 @@ public class GroceryShop {
 		this.itemsArrayList.add(addItem);
 	}
 
-	public void storeItem(ArrayList<Item> itemsArrayList) {
+	public void storeItem(Item item ) {
 		// Serialize the arraylist to a json string
 		Gson gson = new Gson();
-		String json = gson.toJson(itemsArrayList);
+		ArrayList<Item> itemsStor = new ArrayList<Item> ();
+		itemsStor.add(item);
+		String json = gson.toJson(itemsStor);
 
 		// Write the json string to a file
 		try (FileWriter writer = new FileWriter(itemFilePath, true)) {
@@ -120,11 +122,10 @@ public class GroceryShop {
 
 				for (Item currItem : deserializedItems) {
 					if (currItem.getItemID() != itemId) {
-
 						update.add(currItem);
+						// add the item after deletion in a file
 						String json = gson.toJson(update);
-						// Write the json string to the updated file
-						try (FileWriter writer = new FileWriter(updatedItemsFilePath, true)) {
+						try (FileWriter writer = new FileWriter(updatedAfterDeleteFilePath)) {
 							writer.write(json);
 							writer.write("\n");
 							// System.out.println("Serialization Done");
@@ -133,9 +134,58 @@ public class GroceryShop {
 							e.printStackTrace();
 						}
 					}
+
+				}
+			}
+			// Delete the content of item file
+
+			try (FileWriter writer = new FileWriter(itemFilePath)) {
+				writer.write("");
+				// System.out.println("Serialization Done");
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			// update the item file with the new values
+			String json = gson.toJson(update);
+			try (FileWriter writer = new FileWriter(itemFilePath)) {
+				writer.write(json);
+				writer.write("\n");
+				// System.out.println("Serialization Done");
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void updatePrice(int itemId, double price) {
+		// Deserialize the json string and recreate arraylist
+		Gson gson = new Gson();
+		try (BufferedReader reader = new BufferedReader(new FileReader(itemFilePath))) {
+			String line;
+			while ((line = reader.readLine()) != null) {
+				Type type = new TypeToken<List<Item>>() {
+				}.getType();
+				ArrayList<Item> deserializedItems = gson.fromJson(line, type);
+
+				for (Item currItem : deserializedItems) {
+					if (currItem.getItemID() != itemId) {
+
+						update.add(currItem);
+
+					} else if (currItem.getItemID() == itemId) {
+						Item updateItem = new Item(currItem.getItemID(), currItem.getName(), price,
+								currItem.getQuantity());
+						update.add(updateItem);
+					}
 				}
 
 			}
+
 			// Write the json string from the updated file to the original file
 			String json = gson.toJson(update);
 			try (FileWriter writer = new FileWriter(itemFilePath)) {
@@ -146,55 +196,12 @@ public class GroceryShop {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
-public void updatePrice(int itemId , double price) {
-	// Deserialize the json string and recreate arraylist
-			Gson gson = new Gson();
-			try (BufferedReader reader = new BufferedReader(new FileReader(itemFilePath))) {
-				String line;
-				while ((line = reader.readLine()) != null) {
-					Type type = new TypeToken<List<Item>>() {
-					}.getType();
-					ArrayList<Item> deserializedItems = gson.fromJson(line, type);
 
-					for (Item currItem : deserializedItems) {
-						if (currItem.getItemID() != itemId) {
-
-							update.add(currItem);
-							String json = gson.toJson(update);
-							// Write the json string to the updated file
-							try (FileWriter writer = new FileWriter(updatedPriceFilePath, true)) {
-								writer.write(json);
-								writer.write("\n");
-								// System.out.println("Serialization Done");
-							} catch (IOException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
-							}
-						}else if (currItem.getItemID() == itemId) {
-							Item updateItem = new Item(currItem.getItemID(), currItem.getName(), price, currItem.getQuantity());
-							update.add(updateItem);
-						}
-					}
-
-				}
-				// Write the json string from the updated file to the original file
-				String json = gson.toJson(update);
-				try (FileWriter writer = new FileWriter(itemFilePath)) {
-					writer.write(json);
-					writer.write("\n");
-					// System.out.println("Serialization Done");
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-}
 	public void SetinvoiceHeader(String tel, String fax, String email, String website) {
 
 		invoice.SetinvoiceHeader(tel, fax, email, website);

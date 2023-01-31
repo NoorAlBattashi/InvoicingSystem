@@ -3,10 +3,15 @@
  */
 package com.invo;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.InputMismatchException;
+import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.zip.Inflater;
@@ -21,7 +26,7 @@ import com.google.gson.reflect.TypeToken;
  *
  */
 public class App {
-	public static String filePath = "data/Items.json";
+	public static String itemFilePath = "data/Items.json";
 
 	/**
 	 * @param args
@@ -151,8 +156,7 @@ public class App {
 
 						// Store the data
 						Item addNewItem = new Item(theItemID, name, unitPrice, quantity);
-						myShop.addItem(addNewItem);
-						myShop.storeItem(myShop.itemsArrayList);
+						myShop.storeItem(addNewItem);
 						System.out.println();
 						break;
 
@@ -174,6 +178,7 @@ public class App {
 						double unitPrice = doubleScanner();
 						
 						myShop.updatePrice(itemId,unitPrice);
+
 						System.out.println();
 						break;
 					}
