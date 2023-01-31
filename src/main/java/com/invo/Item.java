@@ -14,7 +14,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 /**
- * @author LAP-9 
+ * @author LAP-9
  * 
  */
 public class Item {
@@ -29,9 +29,8 @@ public class Item {
 		this.name = name;
 		this.unitPrice = unitPrice;
 		this.quantity = quantity;
-				
+
 	}
-	
 
 	public int getItemID() {
 		return itemID;
@@ -48,7 +47,5 @@ public class Item {
 	public int getQuantity() {
 		return quantity;
 	}
-
-	
 
 }

@@ -35,6 +35,7 @@ public class GroceryShop {
 	public static String updatedPriceFilePath = "data/UpdatePrice.json";
 	public static String invoiceFilePath = "data/Invoice.json";
 	public static String cartFilePath = "data/Cart.json";
+	public static String detailedInvoiceFilePath = "data/DetailedInvoice.json";
 	ArrayList<Item> itemsArrayList = new ArrayList<Item>();
 	ArrayList<Item> update = new ArrayList<Item>();
 	ArrayList<Item> itemsOfCustomerArrayList = new ArrayList<Item>();
@@ -68,10 +69,10 @@ public class GroceryShop {
 		this.itemsArrayList.add(addItem);
 	}
 
-	public void storeItem(Item item ) {
+	public void storeItem(Item item) {
 		// Serialize the arraylist to a json string
 		Gson gson = new Gson();
-		ArrayList<Item> itemsStor = new ArrayList<Item> ();
+		ArrayList<Item> itemsStor = new ArrayList<Item>();
 		itemsStor.add(item);
 		String json = gson.toJson(itemsStor);
 
@@ -209,11 +210,12 @@ public class GroceryShop {
 
 		invoice.SetinvoiceHeader(tel, fax, email, website);
 	}
+
 	public void addItemInCart(Item addItem) {
 
-		//Serialize the arraylist to a json string
+		// Serialize the arraylist to a json string
 		Gson gson = new Gson();
-		ArrayList<Item> itemsStor = new ArrayList<Item> ();
+		ArrayList<Item> itemsStor = new ArrayList<Item>();
 		itemsStor.add(addItem);
 		String json = gson.toJson(itemsStor);
 
@@ -227,85 +229,120 @@ public class GroceryShop {
 			e.printStackTrace();
 		}
 	}
+
 	public double getQtyAmountPrice() {
 		// Deserialize the json string and recreate arraylist
-				Gson gson = new Gson();
-				int counter = 1;
-				double sum = 0;
-				try (BufferedReader reader = new BufferedReader(new FileReader(cartFilePath))) {
-					String line;
-					while ((line = reader.readLine()) != null) {
-						Type type = new TypeToken<List<Item>>() {
-						}.getType();
-						ArrayList<Item> deserializedItems = gson.fromJson(line, type);
+		Gson gson = new Gson();
+		int counter = 1;
+		double sum = 0;
+		try (BufferedReader reader = new BufferedReader(new FileReader(cartFilePath))) {
+			String line;
+			while ((line = reader.readLine()) != null) {
+				Type type = new TypeToken<List<Item>>() {
+				}.getType();
+				ArrayList<Item> deserializedItems = gson.fromJson(line, type);
 
-						for (Item currItem : deserializedItems) {							
-							 double unitPrice = currItem.getUnitPrice();
-							 int quantity = currItem.getQuantity();
-							double total = unitPrice*quantity ;
-							sum += total;
-							
-							counter++;
-						}
-					}
-					// System.out.println("Deserialization Done");
-				} catch (IOException e) {
-					e.printStackTrace();
+				for (Item currItem : deserializedItems) {
+					double unitPrice = currItem.getUnitPrice();
+					int quantity = currItem.getQuantity();
+					double total = unitPrice * quantity;
+					sum += total;
+
+					counter++;
 				}
+			}
+			// System.out.println("Deserialization Done");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		return sum;
 	}
+
 	public int getQty() {
 		// Deserialize the json string and recreate arraylist
-				Gson gson = new Gson();
-				int Qty = 0;
-				try (BufferedReader reader = new BufferedReader(new FileReader(cartFilePath))) {
-					String line;
-					while ((line = reader.readLine()) != null) {
-						Type type = new TypeToken<List<Item>>() {
-						}.getType();
-						ArrayList<Item> deserializedItems = gson.fromJson(line, type);
+		Gson gson = new Gson();
+		int Qty = 0;
+		try (BufferedReader reader = new BufferedReader(new FileReader(cartFilePath))) {
+			String line;
+			while ((line = reader.readLine()) != null) {
+				Type type = new TypeToken<List<Item>>() {
+				}.getType();
+				ArrayList<Item> deserializedItems = gson.fromJson(line, type);
 
-						for (Item currItem : deserializedItems) {
+				for (Item currItem : deserializedItems) {
 
-							 int quantity = currItem.getQuantity();
-							Qty += quantity;
-						}
-					}
-					// System.out.println("Deserialization Done");
-				} catch (IOException e) {
-					e.printStackTrace();
+					int quantity = currItem.getQuantity();
+					Qty += quantity;
 				}
+			}
+			// System.out.println("Deserialization Done");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		return Qty;
 	}
-	public void createInvoice(String invoiceNo,String invoiceDate, String customerName,  double paidAmount) {
+
+	public void createInvoice(String invoiceNo, String invoiceDate, String customerName, double paidAmount) {
 		int quantity = getQty();
 		double totalAmount = getQtyAmountPrice();
-		double balance =   paidAmount - totalAmount;
-		invoice.InvoiceInfo( invoiceNo, invoiceDate,  customerName,  quantity,  totalAmount,  paidAmount,  balance);
+		double balance = paidAmount - totalAmount;
+		invoice.InvoiceInfo(invoiceNo, invoiceDate, customerName, quantity, totalAmount, paidAmount, balance);
 		ArrayList<Invoice> invoices = new ArrayList<Invoice>();
 		invoices.add(invoice);
 		// Serialize the arraylist to a json string
-				Gson gson = new Gson();
-				String json = gson.toJson(invoices);
+		Gson gson = new Gson();
+		String json = gson.toJson(invoices);
 
-				// Write the json string to a file
-				try (FileWriter writer = new FileWriter(invoiceFilePath)) {
-					writer.write(json);
-					writer.write("\n");
-					// System.out.println("Serialization Done");
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+		// Write the json string to a file
+		try (FileWriter writer = new FileWriter(invoiceFilePath)) {
+			writer.write(json);
+			writer.write("\n");
+			// System.out.println("Serialization Done");
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		// read and store data from cart to detailedInvoice file
+		ArrayList<Item> itemArrayList = new ArrayList<Item>();
+		try (BufferedReader reader = new BufferedReader(new FileReader(cartFilePath))) {
+			String line;
+
+			while ((line = reader.readLine()) != null) {
+				Type type = new TypeToken<List<Item>>() {
+				}.getType();
+				ArrayList<Item> deserializedItems = gson.fromJson(line, type);
+
+				for (Item currItem : deserializedItems) {
+					itemArrayList.add(currItem);
 				}
-				
-				// Delete the content of cart file
-				try (FileWriter writer = new FileWriter(cartFilePath)) {
-					writer.write("");
-					// System.out.println("Serialization Done");
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+
+			}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		// collect data of invoices and cart in hashmap
+		List<Object> invoicesAndItems = new ArrayList<Object>();
+		invoicesAndItems.add(invoices);
+		invoicesAndItems.add(itemArrayList);
+		String jsonsString = gson.toJson(invoicesAndItems);
+		try (FileWriter writer = new FileWriter(detailedInvoiceFilePath)) {
+			writer.write(jsonsString);
+			writer.write("\n");
+			// System.out.println("Serialization Done");
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		// Delete the content of cart file
+		try (FileWriter writer = new FileWriter(cartFilePath)) {
+			writer.write("");
+			// System.out.println("Serialization Done");
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
-
 }

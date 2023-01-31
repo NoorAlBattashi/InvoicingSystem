@@ -8,6 +8,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import com.google.gson.Gson;
@@ -22,6 +23,7 @@ import com.google.gson.reflect.TypeToken;
 public class Report {
 	public static String itemFilePath = "data/Items.json";
 	public static String invoiceFilePath = "data/Invoice.json";
+	public static String detailedInvoiceFilePath = "data/DetailedInvoice.json";
 	String reportName;
 
 	public Report() {
@@ -66,9 +68,9 @@ public class Report {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
+
 		// calculate the total sale
-		double sum =0;
+		double sum = 0;
 		try (BufferedReader reader = new BufferedReader(new FileReader(invoiceFilePath))) {
 			String line;
 			while ((line = reader.readLine()) != null) {
@@ -87,10 +89,12 @@ public class Report {
 			e.printStackTrace();
 		}
 	}
-	//All Invoices ( Invoice No, Invoice Date, Customer Name, No of items, Total, Balance)
+
+	// All Invoices ( Invoice No, Invoice Date, Customer Name, No of items, Total,
+	// Balance)
 	public void allInvoice() {
 		Gson gson = new Gson();
-		Integer counter =1;
+		Integer counter = 1;
 		try (BufferedReader reader = new BufferedReader(new FileReader(invoiceFilePath))) {
 			String line;
 			while ((line = reader.readLine()) != null) {
@@ -110,6 +114,30 @@ public class Report {
 					System.out.println("==============================");
 					counter++;
 				}
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void detailedInvoice() {
+		Gson gson = new Gson();
+		Integer counter = 1;
+		Item item = null;
+		Invoice invoice = new Invoice();
+		try (BufferedReader reader = new BufferedReader(new FileReader(detailedInvoiceFilePath))) {
+			String line;
+			while ((line = reader.readLine()) != null) {
+				Type type = new TypeToken<List<Object>>() {
+				}.getType();
+				List<Object> deserializedItems = gson.fromJson(line, type);
+
+				// for (Object iObject : deserializedItems) {
+				// System.out.println("(" + counter + ")");
+				System.out.println(deserializedItems.get(0).getClass());
+				//
+				// counter++;
+				// }
 			}
 		} catch (IOException e) {
 			e.printStackTrace();

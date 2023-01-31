@@ -30,10 +30,12 @@ public class Invoice {
 	ArrayList<Item> itemsArrayList = new ArrayList<Item>();
 	Item item = null;
 
-	public  Invoice() {
-		
+	public Invoice() {
+
 	}
-	public void InvoiceInfo(String invoiceNo,String invoiceDate, String customerName, int numberOfItems, double totalAmount, double paidAmount, double balance) {
+
+	public void InvoiceInfo(String invoiceNo, String invoiceDate, String customerName, int numberOfItems,
+			double totalAmount, double paidAmount, double balance) {
 		this.invoiceNo = invoiceNo;
 		this.invoiceDate = invoiceDate;
 		this.customerName = customerName;
@@ -41,21 +43,25 @@ public class Invoice {
 		this.totalAmount = totalAmount;
 		this.paidAmount = paidAmount;
 		this.balance = balance;
-		
+
 	}
 
 	public String getInvoiceDate() {
 		return invoiceDate;
 	}
+
 	public String getinvoiceNo() {
 		return invoiceNo;
 	}
+
 	public String getcustomerName() {
 		return customerName;
 	}
-	public  double getbalance() {
+
+	public double getbalance() {
 		return balance;
 	}
+
 	public void setInvoiceDate(String invoiceDate) {
 		this.invoiceDate = invoiceDate;
 	}
@@ -116,8 +122,7 @@ public class Invoice {
 		this.website = website;
 	}
 
-	public void SetinvoiceHeader(String tel, String fax,
-			String email, String website) {
+	public void SetinvoiceHeader(String tel, String fax, String email, String website) {
 		this.tel = tel;
 		this.fax = fax;
 		this.email = email;
@@ -127,7 +132,7 @@ public class Invoice {
 		invoiceHeadeArrayList.add(fax);
 		invoiceHeadeArrayList.add(email);
 		invoiceHeadeArrayList.add(website);
-		
+
 		// Serialize the arraylist to a json string
 		Gson gson = new Gson();
 		String json = gson.toJson(invoiceHeadeArrayList);
@@ -136,12 +141,13 @@ public class Invoice {
 		try (FileWriter writer = new FileWriter(invoiceHeaderFilePath)) {
 			writer.write(json);
 			writer.write("\n");
-			//System.out.println("Serialization Done");
+			// System.out.println("Serialization Done");
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
+
 //
 //	public List<Item> getItems() {
 //		return items;

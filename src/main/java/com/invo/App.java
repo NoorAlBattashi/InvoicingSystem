@@ -35,6 +35,12 @@ public class App {
 		GroceryShop myShop = new GroceryShop();
 		Report generateReport = new Report();
 		boolean again = true;
+		int option1 = 0;
+		int option2 = 0;
+		int option3 = 0;
+		int option4 = 0;
+		int option5 = 0;
+		int option6 = 0;
 		while (again) {
 			// Sub Menu for Shop Settings
 			Menu subMenuShopSettings = new Menu();
@@ -86,7 +92,7 @@ public class App {
 				// let the user select from the sub menu
 				System.out.print("Enter your choice: ");
 				int choiceShopSettingsSubMenu = intScanner();
-
+				option1++;
 				try {
 					switch (choiceShopSettingsSubMenu) {
 					case 1: {// Load Data
@@ -134,6 +140,7 @@ public class App {
 				// let the user select from the sub menu
 				System.out.print("Enter your choice: ");
 				int choiceManageShopItemsSubMenu = intScanner();
+				option2++;
 				try {
 					switch (choiceManageShopItemsSubMenu) {
 					case 1: {
@@ -143,7 +150,7 @@ public class App {
 						System.out.println("2- The shop");
 						System.out.print("Here: ");
 						int userChoice = intScanner();
-						if(userChoice == 1) {
+						if (userChoice == 1) {
 							System.out.println("Please write the details of the item:");
 							// ask the user to enter the itemID
 							System.out.print("Write the item id: ");
@@ -165,7 +172,7 @@ public class App {
 							Item addNewItem = new Item(theItemID, name, unitPrice, quantity);
 							myShop.addItemInCart(addNewItem);
 							System.out.println();
-						}else if (userChoice == 2) {
+						} else if (userChoice == 2) {
 							System.out.println("Please write the details of the item:");
 							// ask the user to enter the itemID
 							System.out.print("Write the item id: ");
@@ -188,7 +195,7 @@ public class App {
 							myShop.storeItem(addNewItem);
 							System.out.println();
 						}
-						
+
 						break;
 
 					}
@@ -207,8 +214,8 @@ public class App {
 						// ask the user to enter the unit Price
 						System.out.print("Write the unit price: ");
 						double unitPrice = doubleScanner();
-						
-						myShop.updatePrice(itemId,unitPrice);
+
+						myShop.updatePrice(itemId, unitPrice);
 
 						System.out.println();
 						break;
@@ -235,42 +242,53 @@ public class App {
 
 			case 3: {
 				// Create New Invoice
-				//String invoiceNo,String invoiceDate, String customerName, 
+				// String invoiceNo,String invoiceDate, String customerName,
 				System.out.print("Enter the invoice number: ");
 				String invoiceNo = stringScanner();
-				
+
 				System.out.print("Enter the invoice Date (dd-mm-yyyy): ");
 				String invoiceDate = stringScanner();
-				
+
 				System.out.print("Enter the customer name: ");
 				String customerName = stringScanner();
-				
+
 				System.out.print("Enter the customer paid amount: ");
-				 double paidAmount = doubleScanner();
-				
+				double paidAmount = doubleScanner();
+
 				myShop.createInvoice(invoiceNo, invoiceDate, customerName, paidAmount);
 				System.out.println();
+				option3++;
 				break;
 			}
 			case 4: {
 				// Report: Statistics
 				generateReport.getReportStatistic();
 				System.out.println();
+				option4++;
 				break;
 			}
 			case 5: {
 				// Report: All Invoices
 				generateReport.allInvoice();
 				System.out.println();
+				option5++;
 				break;
 			}
 			case 6: {
 				// Search (1) Invoice
+				generateReport.detailedInvoice();
 				System.out.println();
+				option6++;
 				break;
 			}
 			case 7: {
 				// Program Statistics
+				System.out.println("1: Shop Settings = " + option1);
+				System.out.println("2: Manage Shop Items = " + option2);
+				System.out.println("3: Create New Invoice = " + option3);
+				System.out.println("4: Report: Statistics (No Of Items, No of Invoices, Total Sales) = " + option4);
+				System.out.println("5: Report: All Invoices = " + option5);
+				System.out.println("6: Search (1) Invoice = " + option6);
 				System.out.println();
 				break;
 			}
