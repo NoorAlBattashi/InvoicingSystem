@@ -21,6 +21,9 @@ public class Customer {
 	public String getCustomerFullName() {
 		return customerFullName;
 	}
+	public void setCustomerName(String customerName) {
+		this.customerFullName = customerName;
+	}
 
 	public String getPhoneNumber() {
 		return phoneNumber;

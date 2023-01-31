@@ -3,15 +3,22 @@
  */
 package com.invo;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.List;
+
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
 /**
  * @author LAP-9 
- * This class has fields for an item's ID, name, unit price, and
- * quantity, along with getters for each field. The getQtyAmountPrice
- * method returns the total price of the item based on the unit price
- * and quantity
+ * 
  */
 public class Item {
-
+	public static String CartFilePath = "data/Cart.json";
 	public int itemID;
 	public String name;
 	public double unitPrice;
@@ -42,8 +49,6 @@ public class Item {
 		return quantity;
 	}
 
-	public double getQtyAmountPrice() {
-		return unitPrice * quantity;
-	}
+	
 
 }

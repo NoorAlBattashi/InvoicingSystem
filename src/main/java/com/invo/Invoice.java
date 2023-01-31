@@ -16,32 +16,46 @@ import com.google.gson.Gson;
  */
 public class Invoice {
 	public static String invoiceHeaderFilePath = "data/InvoiceHeader.json";
+	private String invoiceNo;
 	private String invoiceDate;
+	private String customerName;
 	private int numberOfItems;
 	private double totalAmount;
 	private double paidAmount;
+	private double balance;
 	private String tel;
 	private String fax;
 	private String email;
 	private String website;
-	private List<Item> items;
+	ArrayList<Item> itemsArrayList = new ArrayList<Item>();
+	Item item = null;
 
 	public  Invoice() {
 		
 	}
-	public void InvoiceInfo(String invoiceDate, int numberOfItems, double totalAmount, double paidAmount) {
-		
+	public void InvoiceInfo(String invoiceNo,String invoiceDate, String customerName, int numberOfItems, double totalAmount, double paidAmount, double balance) {
+		this.invoiceNo = invoiceNo;
 		this.invoiceDate = invoiceDate;
+		this.customerName = customerName;
 		this.numberOfItems = numberOfItems;
 		this.totalAmount = totalAmount;
 		this.paidAmount = paidAmount;
-		this.items = new ArrayList<Item>();
+		this.balance = balance;
+		
 	}
 
 	public String getInvoiceDate() {
 		return invoiceDate;
 	}
-
+	public String getinvoiceNo() {
+		return invoiceNo;
+	}
+	public String getcustomerName() {
+		return customerName;
+	}
+	public  double getbalance() {
+		return balance;
+	}
 	public void setInvoiceDate(String invoiceDate) {
 		this.invoiceDate = invoiceDate;
 	}
@@ -128,12 +142,12 @@ public class Invoice {
 			e.printStackTrace();
 		}
 	}
-
-	public List<Item> getItems() {
-		return items;
-	}
-
-	public void setItems(List<Item> items) {
-		this.items = items;
-	}
+//
+//	public List<Item> getItems() {
+//		return items;
+//	}
+//
+//	public void setItems(List<Item> items) {
+//		this.items = items;
+//	}
 }

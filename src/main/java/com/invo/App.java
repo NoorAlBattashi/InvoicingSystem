@@ -33,6 +33,7 @@ public class App {
 	 */
 	public static void main(String[] args) {
 		GroceryShop myShop = new GroceryShop();
+		Report generateReport = new Report();
 		boolean again = true;
 		while (again) {
 			// Sub Menu for Shop Settings
@@ -137,27 +138,57 @@ public class App {
 					switch (choiceManageShopItemsSubMenu) {
 					case 1: {
 						// Add Items
-						System.out.println("Please write the details of the item:");
-						// ask the user to enter the itemID
-						System.out.print("Write the item id: ");
-						int theItemID = intScanner();
+						System.out.println("You want to add this item in the customer cart or the shop?");
+						System.out.println("1- The customer cart ");
+						System.out.println("2- The shop");
+						System.out.print("Here: ");
+						int userChoice = intScanner();
+						if(userChoice == 1) {
+							System.out.println("Please write the details of the item:");
+							// ask the user to enter the itemID
+							System.out.print("Write the item id: ");
+							int theItemID = intScanner();
 
-						// ask the user to enter the item name
-						System.out.print("Write the item name: ");
-						String name = stringScanner();
+							// ask the user to enter the item name
+							System.out.print("Write the item name: ");
+							String name = stringScanner();
 
-						// ask the user to enter the unit Price
-						System.out.print("Write the unit price: ");
-						double unitPrice = doubleScanner();
+							// ask the user to enter the unit Price
+							System.out.print("Write the unit price: ");
+							double unitPrice = doubleScanner();
 
-						// ask the user to enter the quantity
-						System.out.print("Write the quantity: ");
-						int quantity = intScanner();
+							// ask the user to enter the quantity
+							System.out.print("Write the quantity: ");
+							int quantity = intScanner();
 
-						// Store the data
-						Item addNewItem = new Item(theItemID, name, unitPrice, quantity);
-						myShop.storeItem(addNewItem);
-						System.out.println();
+							// Store the data
+							Item addNewItem = new Item(theItemID, name, unitPrice, quantity);
+							myShop.addItemInCart(addNewItem);
+							System.out.println();
+						}else if (userChoice == 2) {
+							System.out.println("Please write the details of the item:");
+							// ask the user to enter the itemID
+							System.out.print("Write the item id: ");
+							int theItemID = intScanner();
+
+							// ask the user to enter the item name
+							System.out.print("Write the item name: ");
+							String name = stringScanner();
+
+							// ask the user to enter the unit Price
+							System.out.print("Write the unit price: ");
+							double unitPrice = doubleScanner();
+
+							// ask the user to enter the quantity
+							System.out.print("Write the quantity: ");
+							int quantity = intScanner();
+
+							// Store the data
+							Item addNewItem = new Item(theItemID, name, unitPrice, quantity);
+							myShop.storeItem(addNewItem);
+							System.out.println();
+						}
+						
 						break;
 
 					}
@@ -204,16 +235,32 @@ public class App {
 
 			case 3: {
 				// Create New Invoice
+				//String invoiceNo,String invoiceDate, String customerName, 
+				System.out.print("Enter the invoice number: ");
+				String invoiceNo = stringScanner();
+				
+				System.out.print("Enter the invoice Date (dd-mm-yyyy): ");
+				String invoiceDate = stringScanner();
+				
+				System.out.print("Enter the customer name: ");
+				String customerName = stringScanner();
+				
+				System.out.print("Enter the customer paid amount: ");
+				 double paidAmount = doubleScanner();
+				
+				myShop.createInvoice(invoiceNo, invoiceDate, customerName, paidAmount);
 				System.out.println();
 				break;
 			}
 			case 4: {
 				// Report: Statistics
+				generateReport.getReportStatistic();
 				System.out.println();
 				break;
 			}
 			case 5: {
 				// Report: All Invoices
+				generateReport.allInvoice();
 				System.out.println();
 				break;
 			}
