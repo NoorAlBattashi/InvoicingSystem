@@ -3,30 +3,34 @@
  */
 package com.invo;
 
+import java.io.FileWriter;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+
+import com.google.gson.Gson;
 
 /**
  * @author LAP-9
  */
 public class Invoice {
+	public static String invoiceHeaderFilePath = "data/InvoiceHeader.json";
 	private String invoiceDate;
 	private int numberOfItems;
 	private double totalAmount;
 	private double paidAmount;
-	private int tel;
+	private String tel;
 	private String fax;
 	private String email;
 	private String website;
 	private List<Item> items;
 
-	public Invoice(String invoiceDate, int numberOfItems, double totalAmount, double paidAmount, int tel, String fax,
-			String email, String website) {
-		this.tel = tel;
-		this.fax = fax;
-		this.email = email;
-		this.website = website;
+	public  Invoice() {
+		
+	}
+	public void InvoiceInfo(String invoiceDate, int numberOfItems, double totalAmount, double paidAmount) {
+		
 		this.invoiceDate = invoiceDate;
 		this.numberOfItems = numberOfItems;
 		this.totalAmount = totalAmount;
@@ -66,11 +70,11 @@ public class Invoice {
 		this.paidAmount = paidAmount;
 	}
 
-	public int getTel() {
+	public String getTel() {
 		return tel;
 	}
 
-	public void setTel(int tel) {
+	public void setTel(String tel) {
 		this.tel = tel;
 	}
 
@@ -98,11 +102,31 @@ public class Invoice {
 		this.website = website;
 	}
 
-	public void invoiceHeader() {
-		System.out.println("Tel: " + tel);
-		System.out.println("Fax: " + fax);
-		System.out.println("Email: " + email);
-		System.out.println("Website: " + website);
+	public void SetinvoiceHeader(String tel, String fax,
+			String email, String website) {
+		this.tel = tel;
+		this.fax = fax;
+		this.email = email;
+		this.website = website;
+		ArrayList<String> invoiceHeadeArrayList = new ArrayList<String>();
+		invoiceHeadeArrayList.add(tel);
+		invoiceHeadeArrayList.add(fax);
+		invoiceHeadeArrayList.add(email);
+		invoiceHeadeArrayList.add(website);
+		
+		// Serialize the arraylist to a json string
+		Gson gson = new Gson();
+		String json = gson.toJson(invoiceHeadeArrayList);
+
+		// Write the json string to a file
+		try (FileWriter writer = new FileWriter(invoiceHeaderFilePath)) {
+			writer.write(json);
+			writer.write("\n");
+			//System.out.println("Serialization Done");
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	public List<Item> getItems() {

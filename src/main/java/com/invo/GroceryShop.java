@@ -23,142 +23,133 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.Type;
+
 /**
- * @author LAP-9 
+ * @author LAP-9
  */
 
 public class GroceryShop {
-	public static String filePath = "data/Items.json";
+	public static String itemFilePath = "data/Items.json";
+	public static String shopFilePath = "data/ShopDetails.json";
+	public static String updatedItemsFilePath = "data/UpdatedItems.json";
 	ArrayList<Item> itemsArrayList = new ArrayList<Item>();
+	ArrayList<Item> update = new ArrayList<Item>();
+	//ArrayList<Invoice> InvoiceHeaderArrayList = new ArrayList<Invoice>();
 	Item addItem = null;
+	Invoice invoice = new Invoice();
 	String shopName;
-
-	public GroceryShop(String shopName) {
+public GroceryShop() {
+	
+}
+	public void SetGroceryShopName(String shopName) {
 		this.shopName = shopName;
+		// Serialize the arraylist to a json string
+				Gson gson = new Gson();
+				String json = gson.toJson(shopName);
+
+				// Write the json string to a file
+				try (FileWriter writer = new FileWriter(shopFilePath)) {
+					writer.write(json);
+					writer.write("\n");
+					//System.out.println("Serialization Done");
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 	}
 
 	public void addItem(Item addItem) {
 		this.itemsArrayList.add(addItem);
 	}
 
-	public void storeItem(ArrayList<Item>itemsArrayList) {
-		//Serialize the arraylist to a json string
+	public void storeItem(ArrayList<Item> itemsArrayList) {
+		// Serialize the arraylist to a json string
 		Gson gson = new Gson();
 		String json = gson.toJson(itemsArrayList);
-		
-		//Write the json string to a file
-		try(FileWriter writer = new FileWriter(filePath, true)){
+
+		// Write the json string to a file
+		try (FileWriter writer = new FileWriter(itemFilePath, true)) {
 			writer.write(json);
 			writer.write("\n");
-			System.out.println("Serialization Done");
+			//System.out.println("Serialization Done");
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-	} 
+	}
+
 	public void showItem() {
-		//Deserialize the json string and recreate arraylist
+		// Deserialize the json string and recreate arraylist
 		Gson gson = new Gson();
-		try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
+		int counter =1;
+		try (BufferedReader reader = new BufferedReader(new FileReader(itemFilePath))) {
 			String line;
 			while ((line = reader.readLine()) != null) {
-				Type type = new TypeToken<List<Item>>() {}.getType();
+				Type type = new TypeToken<List<Item>>() {
+				}.getType();
 				ArrayList<Item> deserializedItems = gson.fromJson(line, type);
 				
 				for (Item currItem : deserializedItems) {
-					System.out.println(currItem.getItemID());
-					System.out.println(currItem.getName());
-					System.out.println(currItem.getUnitPrice());
-					System.out.println(currItem.getQuantity());
+					System.out.println("("+counter+")");
+					System.out.println("Item ID: "+currItem.getItemID());
+					System.out.println("Item Name: "+currItem.getName());
+					System.out.println("Unit Price: "+currItem.getUnitPrice());
+					System.out.println("Quantity: "+currItem.getQuantity());
+					counter++;
 				}
 			}
-			System.out.println("Deserialization Done");
+			//System.out.println("Deserialization Done");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
-	}
-	
 
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-//	public void addItem(Item addItem) {
-//		this.itemsArrayList.add(addItem);
-//
-////		HashMap<Integer, ArrayList<Item>> gatherItemInfo = new HashMap<Integer, ArrayList<Item>>();
-////		gatherItemInfo.put(addItem.getItemID(), itemsArrayList);
-//
-//		// store the student details on a json file
-//		try (FileWriter storeFileWriter = new FileWriter(filePath, true)) {
-//			Gson gson = new GsonBuilder().create();
-//			gson.toJson(itemsArrayList, storeFileWriter);
-//			storeFileWriter.write("\n");
-//			System.out.println("Added Successfuly!");
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//		}
-//	}
-//
-//	public void deleteItem(int itemid) {
-//		// Read json file
-//		try {
-//			Scanner fileScanner = new Scanner(filePath);
-//			HashMap<Integer, ArrayList<Item>> storeData = new HashMap<Integer, ArrayList<Item>>();
-//			while (fileScanner.hasNextLine()) {
-//				// read from json file, convert json to hash map
-//				Gson gson = new GsonBuilder().create();
-//				Type type = new TypeToken<Map<Integer, ArrayList<Item>>>() {
-//				}.getType();
-//				Map<Integer, ArrayList<Item>> myMap = gson.fromJson(fileScanner.nextLine(), type);
-//
-//				for (Integer i : myMap.keySet()) {
-//					// store the data in hashmap
-//					//storeData.put(i, myMap.get(i));
-//					System.out.println(i);
-//
-//				}
-//			}
-////			// display the previous data
-////			HashMap<Integer, ArrayList<Item>> storeHashMap = new HashMap<Integer, ArrayList<Item>>();
-////			storeHashMap.put(itemid, null);
-////			for (Integer a : storeData.keySet()) {
-////
-////				if (storeHashMap.containsKey(a)) {
-////					//storeData.remove(a);
-////					System.out.println(a);
-////
-////				}
-////			}
-////			// re-write in a file
-////			try (FileWriter filrWriter = new FileWriter(filePath)) {
-////				Gson gson = new GsonBuilder().create();
-////				gson.toJson(storeData, filrWriter);
-////				System.out.println("Done Successfuly!");
-////				filrWriter.write("\n");
-////			} catch (IOException e) {
-////				// TODO Auto-generated catch block
-////				e.printStackTrace();
-////			}
-//
-//			fileScanner.close();
-//
-//		} catch (Exception e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//
-//	}
+	}
+	public void deleteItem(int itemId) {
+		// Deserialize the json string and recreate arraylist
+				Gson gson = new Gson();
+				try (BufferedReader reader = new BufferedReader(new FileReader(itemFilePath))) {
+					String line;
+					while ((line = reader.readLine()) != null) {
+						Type type = new TypeToken<List<Item>>() {
+						}.getType();
+						ArrayList<Item> deserializedItems = gson.fromJson(line, type);
+						
+						for (Item currItem : deserializedItems) {
+							if(currItem.getItemID() != itemId) {
+								
+								update.add(currItem);
+								String json = gson.toJson(update);
+								// Write the json string to the updated file
+								try (FileWriter writer = new FileWriter(updatedItemsFilePath, true)) {
+									writer.write(json);
+									writer.write("\n");
+									//System.out.println("Serialization Done");
+								} catch (IOException e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
+								}
+							}		
+						}
+						
+					}
+					// Write the json string from the updated file to the original file
+					String json = gson.toJson(update);
+					try (FileWriter writer = new FileWriter(itemFilePath)) {
+						writer.write(json);
+						writer.write("\n");
+						//System.out.println("Serialization Done");
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+	}
+	public void SetinvoiceHeader(String tel, String fax,
+			String email, String website) {
+		
+		invoice.SetinvoiceHeader(tel,fax, email, website);
+	}
+
 }
